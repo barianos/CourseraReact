@@ -9,6 +9,7 @@ import { PROMOTIONS } from "../shared/promotions";
 import DishDetail from "./DishdetailComponent";
 import Footer from "./FooterComponent";
 import Contact from "./ContactComponent";
+import About from "./AboutComponent";
 import { Switch, Route, Redirect } from "react-router-dom";
 
 class Main extends Component {
@@ -33,6 +34,35 @@ class Main extends Component {
       );
     };
 
+    const DishWithId = ({ match }) => {
+      return (
+        <DishDetail
+          dish={
+            this.state.dishes.filter(
+              (dish) => dish.id === parseInt(match.params.dishId, 10)
+            )[0]
+          }
+          comments={this.state.comments.filter(
+            (comment) => comment.dishId === parseInt(match.params.dishId, 10)
+          )}
+        />
+      );
+    };
+    const LeaderWithId = ({ match }) => {
+      return (
+        <About
+          leader={
+            this.state.leaders.filter(
+              (leader) => leader.id === parseInt(match.params.leader, 10)
+            )[0]
+          }
+        />
+      );
+    };
+
+    // const AboutWrapper = () => {
+    //   return <About leaders={this.state.leaders} />;
+    // };
     return (
       <div>
         <Header />
@@ -43,7 +73,13 @@ class Main extends Component {
             path="/menu"
             component={() => <Menu dishes={this.state.dishes} />}
           />
+          <Route path="/menu/:dishId" component={DishWithId} />
           <Route exact path="/contactus" component={Contact} />
+          {/* <Route exact path="/aboutus" component={LeaderWithId} /> */}
+          <Route
+            path="/aboutus"
+            render={(props) => <About leaders={this.state.leaders} />}
+          />
           <Redirect to="/home" />
         </Switch>
         <Footer />
